@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Aheadworks\FeiSpecialPricing\Api\Data\BasketItemInterface"
+                type="Aheadworks\FeiSpecialPricing\Model\BasketItem"/>
+    <preference for="Aheadworks\FeiSpecialPricing\Api\Data\RequestInterface"
+                type="Aheadworks\FeiSpecialPricing\Model\Request"/>
+    <preference for="Aheadworks\FeiSpecialPricing\Api\Data\RequestItemInterface"
+                type="Aheadworks\FeiSpecialPricing\Model\RequestItem"/>
+    <preference for="Aheadworks\FeiSpecialPricing\Api\Data\RequestSearchResultsInterface"
+                type="Aheadworks\FeiSpecialPricing\Model\RequestSearchResults"/>
+    <preference for="Aheadworks\FeiSpecialPricing\Api\BasketItemRepositoryInterface"
+                type="Aheadworks\FeiSpecialPricing\Model\BasketItemRepository"/>
+    <preference for="Aheadworks\FeiSpecialPricing\Api\RequestRepositoryInterface"
+                type="Aheadworks\FeiSpecialPricing\Model\RequestRepository"/>
+    <preference for="Aheadworks\FeiSpecialPricing\Api\Data\ItemPriceInterface"
+                type="Aheadworks\FeiSpecialPricing\Model\Data\ItemPrice"/>
+    <preference for="Aheadworks\FeiSpecialPricing\Api\RequestManagementInterface"
+                type="Aheadworks\FeiSpecialPricing\Model\Service\RequestManagement"/>
+
+    <type name="Aheadworks\FeiSpecialPricing\Model\ResourceModel\Request\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">aw_fei_sp_request</argument>
+            <argument name="resourceModel" xsi:type="string">Aheadworks\FeiSpecialPricing\Model\ResourceModel\Request</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="aw_fei_sp_request_listing_data_source" xsi:type="string">Aheadworks\FeiSpecialPricing\Model\ResourceModel\Request\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Aheadworks\FeiSpecialPricing\Model\Service\Request\PostDataProcessor\Composite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="item_prices" xsi:type="object">Aheadworks\FeiSpecialPricing\Model\Service\Request\PostDataProcessor\ItemPrices</item>
+                <item name="expiration_date" xsi:type="object">Aheadworks\FeiSpecialPricing\Model\Service\Request\PostDataProcessor\ExpirationDate</item>
+                <item name="admin_comment" xsi:type="object">Aheadworks\FeiSpecialPricing\Model\Service\Request\PostDataProcessor\AdminComment</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Aheadworks\Ca\Model\Authorization\Acl\ResourceMapper">
+        <arguments>
+            <argument name="map" xsi:type="array">
+                <item name="Aheadworks_FeiSpecialPricing::special_pricing" xsi:type="array">
+                    <item name="0" xsi:type="string">aw_fei_sp/basket</item>
+                    <item name="1" xsi:type="string">aw_fei_sp/basket/index</item>
+                    <item name="2" xsi:type="string">aw_fei_sp/basket/add</item>
+                    <item name="3" xsi:type="string">aw_fei_sp/basket/updatePost</item>
+                    <item name="4" xsi:type="string">aw_fei_sp/basket/submit</item>
+                    <item name="5" xsi:type="string">aw_fei_sp/request</item>
+                    <item name="6" xsi:type="string">aw_fei_sp/request/index</item>
+                    <item name="7" xsi:type="string">aw_fei_sp/request/view</item>
+                    <item name="8" xsi:type="string">aw_fei_sp/request/addToCart</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

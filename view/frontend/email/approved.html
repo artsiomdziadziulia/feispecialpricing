@@ -1,0 +1,23 @@
+<!--@subject {{trans "Your special pricing request #%request_id was approved" request_id=$request_id}} @-->
+<!--@vars {
+"var request_id":"Request ID",
+"var customer_name":"Customer Name",
+"var admin_comment":"FEI Comment",
+"var expires_at":"Valid Until",
+"var items_html|raw":"Items Table",
+"var view_url":"Request URL"
+} @-->
+{{template config_path="design/email/header_template"}}
+
+<p>{{trans "Hello %name," name=$customer_name}}</p>
+<p>{{trans "FEI approved special prices for your request #%request_id. The prices are valid until %date and can be used for one order." request_id=$request_id date=$expires_at}}</p>
+
+{{var items_html|raw}}
+
+{{depend admin_comment}}
+<p><strong>{{trans "Comment from FEI:"}}</strong><br/>{{var admin_comment}}</p>
+{{/depend}}
+
+<p><a href="{{var view_url}}">{{trans "Open the request and add the items to your cart"}}</a></p>
+
+{{template config_path="design/email/footer_template"}}

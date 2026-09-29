@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <aw_fei_special_pricing>
+            <general>
+                <default_expiration_days>30</default_expiration_days>
+            </general>
+            <email>
+                <sender>general</sender>
+                <new_request_template>aw_fei_special_pricing_email_new_request_template</new_request_template>
+                <approved_template>aw_fei_special_pricing_email_approved_template</approved_template>
+                <rejected_template>aw_fei_special_pricing_email_rejected_template</rejected_template>
+            </email>
+        </aw_fei_special_pricing>
+    </default>
+</config>

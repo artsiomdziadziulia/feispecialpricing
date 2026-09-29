@@ -1,0 +1,27 @@
+<!--@subject {{trans "New special pricing request #%request_id from %company" request_id=$request_id company=$company_name}} @-->
+<!--@vars {
+"var request_id":"Request ID",
+"var company_name":"Company Name",
+"var customer_name":"Requester Name",
+"var customer_email":"Requester Email",
+"var customer_comment":"Customer Comment",
+"var items_html|raw":"Items Table",
+"var review_url":"Admin Review URL"
+} @-->
+{{template config_path="design/email/header_template"}}
+
+<p>{{trans "A new special pricing request was submitted."}}</p>
+<p>
+    <strong>{{trans "Request #"}}</strong>{{var request_id}}<br/>
+    <strong>{{trans "Company:"}}</strong> {{var company_name}}<br/>
+    <strong>{{trans "Requested by:"}}</strong> {{var customer_name}} ({{var customer_email}})
+</p>
+{{depend customer_comment}}
+<p><strong>{{trans "Comment:"}}</strong><br/>{{var customer_comment}}</p>
+{{/depend}}
+
+{{var items_html|raw}}
+
+<p><a href="{{var review_url}}">{{trans "Review the request in the admin panel"}}</a></p>
+
+{{template config_path="design/email/footer_template"}}

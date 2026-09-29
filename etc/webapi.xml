@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/awFei/specialPricing/requests" method="GET">
+        <service class="Aheadworks\FeiSpecialPricing\Api\RequestManagementInterface" method="getList"/>
+        <resources>
+            <resource ref="Aheadworks_FeiSpecialPricing::requests_api"/>
+        </resources>
+    </route>
+    <route url="/V1/awFei/specialPricing/requests/:requestId" method="GET">
+        <service class="Aheadworks\FeiSpecialPricing\Api\RequestManagementInterface" method="get"/>
+        <resources>
+            <resource ref="Aheadworks_FeiSpecialPricing::requests_api"/>
+        </resources>
+    </route>
+    <route url="/V1/awFei/specialPricing/requests/:requestId/approve" method="POST">
+        <service class="Aheadworks\FeiSpecialPricing\Api\RequestManagementInterface" method="approve"/>
+        <resources>
+            <resource ref="Aheadworks_FeiSpecialPricing::requests_api"/>
+        </resources>
+    </route>
+    <route url="/V1/awFei/specialPricing/requests/:requestId/reject" method="POST">
+        <service class="Aheadworks\FeiSpecialPricing\Api\RequestManagementInterface" method="reject"/>
+        <resources>
+            <resource ref="Aheadworks_FeiSpecialPricing::requests_api"/>
+        </resources>
+    </route>
+</routes>

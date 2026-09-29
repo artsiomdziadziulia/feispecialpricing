@@ -1,0 +1,19 @@
+<!--@subject {{trans "Your special pricing request #%request_id was rejected" request_id=$request_id}} @-->
+<!--@vars {
+"var request_id":"Request ID",
+"var customer_name":"Customer Name",
+"var admin_comment":"FEI Comment",
+"var view_url":"Request URL"
+} @-->
+{{template config_path="design/email/header_template"}}
+
+<p>{{trans "Hello %name," name=$customer_name}}</p>
+<p>{{trans "Unfortunately, FEI rejected your special pricing request #%request_id." request_id=$request_id}}</p>
+
+{{depend admin_comment}}
+<p><strong>{{trans "Comment from FEI:"}}</strong><br/>{{var admin_comment}}</p>
+{{/depend}}
+
+<p><a href="{{var view_url}}">{{trans "View the request"}}</a></p>
+
+{{template config_path="design/email/footer_template"}}

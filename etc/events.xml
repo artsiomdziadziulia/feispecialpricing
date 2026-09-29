@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="sales_quote_item_qty_set_after">
+        <observer name="aw_fei_sp_validate_linked_item_qty"
+                  instance="Aheadworks\FeiSpecialPricing\Observer\Quote\ValidateLinkedItemQtyObserver"/>
+    </event>
+    <event name="sales_quote_collect_totals_before">
+        <observer name="aw_fei_sp_release_unavailable_prices"
+                  instance="Aheadworks\FeiSpecialPricing\Observer\Quote\ReleaseUnavailablePricesObserver"/>
+    </event>
+    <event name="sales_model_service_quote_submit_before">
+        <observer name="aw_fei_sp_validate_before_submit"
+                  instance="Aheadworks\FeiSpecialPricing\Observer\Quote\ValidateBeforeSubmitObserver"/>
+    </event>
+    <event name="aw_fei_sp_request_submitted">
+        <observer name="aw_fei_sp_notify_fei"
+                  instance="Aheadworks\FeiSpecialPricing\Observer\Request\NotifyObserver"/>
+    </event>
+    <event name="aw_fei_sp_request_decided">
+        <observer name="aw_fei_sp_notify_customer"
+                  instance="Aheadworks\FeiSpecialPricing\Observer\Request\NotifyObserver"/>
+    </event>
+    <event name="sales_order_place_after">
+        <observer name="aw_fei_sp_mark_request_ordered"
+                  instance="Aheadworks\FeiSpecialPricing\Observer\Order\MarkRequestOrderedObserver"/>
+    </event>
+</config>

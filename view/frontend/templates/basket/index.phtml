@@ -1,0 +1,116 @@
+<?php
+declare(strict_types=1);
+
+use Aheadworks\FeiSpecialPricing\ViewModel\Basket;
+use Aheadworks\FeiSpecialPricing\ViewModel\Formatter;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var Basket $viewModel */
+/** @var Formatter $formatter */
+$viewModel = $block->getData('view_model');
+$formatter = $block->getData('formatter');
+$rows = $viewModel->getRows();
+?>
+<div class="aw-fei-sp-basket">
+    <p class="aw-fei-sp-basket__intro">
+        <?= $escaper->escapeHtml(__(
+            'Collect products here and submit them to FEI to request special pricing. '
+            . 'Approved prices can then be used for a single order.'
+        )) ?>
+        <a href="<?= $escaper->escapeUrl($viewModel->getRequestsUrl()) ?>">
+            <?= $escaper->escapeHtml(__('View my requests')) ?>
+        </a>
+    </p>
+
+    <?php if ($rows === []): ?>
+        <div class="message info empty">
+            <span><?= $escaper->escapeHtml(__(
+                'Your Special Pricing basket is empty. Use the "Add to Special Pricing" button on a product page.'
+            )) ?></span>
+        </div>
+    <?php else: ?>
+        <form class="aw-fei-sp-basket__items" method="post"
+              action="<?= $escaper->escapeUrl($viewModel->getUpdateUrl()) ?>">
+            <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
+            <div class="table-wrapper">
+                <table class="data table aw-fei-sp-table">
+                    <caption class="table-caption"><?= $escaper->escapeHtml(__('Special Pricing Basket')) ?></caption>
+                    <thead>
+                    <tr>
+                        <th scope="col"><?= $escaper->escapeHtml(__('Product')) ?></th>
+                        <th scope="col"><?= $escaper->escapeHtml(__('SKU')) ?></th>
+                        <th scope="col"><?= $escaper->escapeHtml(__('Current Price')) ?></th>
+                        <th scope="col"><?= $escaper->escapeHtml(__('Qty')) ?></th>
+                        <th scope="col"><span class="sr-only"><?= $escaper->escapeHtml(__('Actions')) ?></span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($rows as $row): ?>
+                        <tr>
+                            <td data-th="<?= $escaper->escapeHtmlAttr(__('Product')) ?>">
+                                <?php if ($row['url'] !== ''): ?>
+                                    <a href="<?= $escaper->escapeUrl($row['url']) ?>">
+                                        <?= $escaper->escapeHtml($row['name']) ?>
+                                    </a>
+                                <?php else: ?>
+                                    <?= $escaper->escapeHtml($row['name']) ?>
+                                <?php endif; ?>
+                            </td>
+                            <td data-th="<?= $escaper->escapeHtmlAttr(__('SKU')) ?>">
+                                <?= $escaper->escapeHtml($row['sku']) ?>
+                            </td>
+                            <td data-th="<?= $escaper->escapeHtmlAttr(__('Current Price')) ?>">
+                                <?= $escaper->escapeHtml($formatter->formatPrice($row['price'])) ?>
+                            </td>
+                            <td data-th="<?= $escaper->escapeHtmlAttr(__('Qty')) ?>">
+                                <input type="number" class="input-text qty" min="0" step="any"
+                                       name="qty[<?= (int) $row['id'] ?>]"
+                                       value="<?= $escaper->escapeHtmlAttr($formatter->formatQty($row['qty'])) ?>"
+                                       aria-label="<?= $escaper->escapeHtmlAttr(__('Qty')) ?>"/>
+                            </td>
+                            <td>
+                                <button type="submit" class="action delete" name="remove"
+                                        value="<?= (int) $row['id'] ?>">
+                                    <span><?= $escaper->escapeHtml(__('Remove')) ?></span>
+                                </button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <div class="actions-toolbar">
+                <div class="secondary">
+                    <button type="submit" class="action update">
+                        <span><?= $escaper->escapeHtml(__('Update Basket')) ?></span>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <form class="form aw-fei-sp-basket__submit" method="post"
+              action="<?= $escaper->escapeUrl($viewModel->getSubmitUrl()) ?>">
+            <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
+            <fieldset class="fieldset">
+                <div class="field">
+                    <label class="label" for="aw-fei-sp-comment">
+                        <span><?= $escaper->escapeHtml(__('Comment for FEI')) ?></span>
+                    </label>
+                    <div class="control">
+                        <textarea id="aw-fei-sp-comment" name="comment" rows="4" maxlength="2000"></textarea>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="actions-toolbar">
+                <div class="primary">
+                    <button type="submit" class="action primary">
+                        <span><?= $escaper->escapeHtml(__('Submit for Special Pricing')) ?></span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    <?php endif; ?>
+</div>

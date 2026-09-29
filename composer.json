@@ -1,0 +1,33 @@
+{
+    "name": "aheadworks/module-fei-special-pricing",
+    "description": "FEI Special Pricing — secondary basket, special pricing requests approved by FEI, purchase at approved prices",
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "license": [
+        "proprietary"
+    ],
+    "require": {
+        "php": ">=8.2",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-catalog": "*",
+        "magento/module-customer": "*",
+        "magento/module-store": "*",
+        "magento/module-ui": "*",
+        "magento/module-checkout": "*",
+        "magento/module-configurable-product": "*",
+        "magento/module-quote": "*",
+        "magento/module-sales": "*",
+        "aheadworks/module-ca": "*",
+        "aheadworks/module-fei-base": "*",
+        "aheadworks/module-fei-ca": "*"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Aheadworks\\FeiSpecialPricing\\": ""
+        }
+    }
+}

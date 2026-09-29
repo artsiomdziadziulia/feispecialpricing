@@ -1,0 +1,30 @@
+<?php
+declare(strict_types=1);
+
+use Aheadworks\FeiSpecialPricing\ViewModel\AddButton;
+use Magento\Catalog\Block\Product\View;
+use Magento\Framework\Escaper;
+
+/** @var View $block */
+/** @var Escaper $escaper */
+/** @var AddButton $viewModel */
+$viewModel = $block->getData('view_model');
+$product = $block->getProduct();
+?>
+<?php if ($viewModel->isRenderable($product)): ?>
+    <div class="aw-fei-sp-add"
+         hidden
+         data-mage-init='<?= $escaper->escapeHtmlAttr(json_encode([
+             'awFeiSpecialPricingAdd' => [
+                 'addUrl' => $viewModel->getAddUrl(),
+                 'basketUrl' => $viewModel->getBasketUrl(),
+                 'productId' => (int) $product->getId(),
+                 'formSelector' => '#product_addtocart_form',
+             ],
+         ])) ?>'>
+        <button type="button" class="action secondary aw-fei-sp-add__button" data-role="aw-fei-sp-add">
+            <span><?= $escaper->escapeHtml(__('Add to Special Pricing')) ?></span>
+        </button>
+        <div class="aw-fei-sp-add__message" data-role="aw-fei-sp-message" role="status" aria-live="polite"></div>
+    </div>
+<?php endif; ?>

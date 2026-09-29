@@ -1,0 +1,97 @@
+<?php
+declare(strict_types=1);
+
+use Aheadworks\FeiSpecialPricing\ViewModel\Formatter;
+use Aheadworks\FeiSpecialPricing\ViewModel\Request\View;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var View $viewModel */
+/** @var Formatter $formatter */
+$viewModel = $block->getData('view_model');
+$formatter = $block->getData('formatter');
+$request = $viewModel->getRequest();
+?>
+<?php if ($request !== null): ?>
+    <div class="aw-fei-sp-request">
+        <dl class="aw-fei-sp-request__summary">
+            <dt><?= $escaper->escapeHtml(__('Status')) ?></dt>
+            <dd>
+                <span class="aw-fei-sp-status aw-fei-sp-status--<?= $escaper->escapeHtmlAttr($request->getStatus()) ?>">
+                    <?= $escaper->escapeHtml($formatter->getStatusLabel($request->getStatus())) ?>
+                </span>
+            </dd>
+            <dt><?= $escaper->escapeHtml(__('Created')) ?></dt>
+            <dd><?= $escaper->escapeHtml($formatter->formatDate($request->getCreatedAt(), true)) ?></dd>
+            <?php if ($request->getExpiresAt() !== null): ?>
+                <dt><?= $escaper->escapeHtml(__('Valid Until')) ?></dt>
+                <dd><?= $escaper->escapeHtml($formatter->formatDate($request->getExpiresAt(), true)) ?></dd>
+            <?php endif; ?>
+            <?php if ($request->getCustomerComment() !== null): ?>
+                <dt><?= $escaper->escapeHtml(__('Your Comment')) ?></dt>
+                <dd><?= $escaper->escapeHtml($request->getCustomerComment()) ?></dd>
+            <?php endif; ?>
+            <?php if ($request->getAdminComment() !== null): ?>
+                <dt><?= $escaper->escapeHtml(__('FEI Comment')) ?></dt>
+                <dd><?= $escaper->escapeHtml($request->getAdminComment()) ?></dd>
+            <?php endif; ?>
+        </dl>
+
+        <div class="table-wrapper">
+            <table class="data table aw-fei-sp-table">
+                <caption class="table-caption"><?= $escaper->escapeHtml(__('Items')) ?></caption>
+                <thead>
+                <tr>
+                    <th scope="col"><?= $escaper->escapeHtml(__('Product')) ?></th>
+                    <th scope="col"><?= $escaper->escapeHtml(__('SKU')) ?></th>
+                    <th scope="col"><?= $escaper->escapeHtml(__('Qty')) ?></th>
+                    <th scope="col"><?= $escaper->escapeHtml(__('Regular Price')) ?></th>
+                    <th scope="col"><?= $escaper->escapeHtml(__('Special Price')) ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($request->getItems() as $item): ?>
+                    <tr>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('Product')) ?>">
+                            <?= $escaper->escapeHtml($item->getName()) ?>
+                        </td>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('SKU')) ?>">
+                            <?= $escaper->escapeHtml($item->getSku()) ?>
+                        </td>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('Qty')) ?>">
+                            <?= $escaper->escapeHtml($formatter->formatQty($item->getQty())) ?>
+                        </td>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('Regular Price')) ?>">
+                            <?= $escaper->escapeHtml($formatter->formatPrice($item->getOriginalPrice())) ?>
+                        </td>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('Special Price')) ?>">
+                            <?= $escaper->escapeHtml($formatter->formatPrice($item->getSpecialPrice())) ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="actions-toolbar">
+            <?php if ($viewModel->canAddToCart()): ?>
+                <div class="primary">
+                    <form method="post" action="<?= $escaper->escapeUrl($viewModel->getAddToCartUrl()) ?>">
+                        <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
+                        <input type="hidden" name="id" value="<?= (int) $request->getId() ?>"/>
+                        <button type="submit" class="action primary">
+                            <span><?= $escaper->escapeHtml(__('Add to Cart at Approved Prices')) ?></span>
+                        </button>
+                    </form>
+                </div>
+            <?php endif; ?>
+            <div class="secondary">
+                <a class="action back" href="<?= $escaper->escapeUrl($viewModel->getListUrl()) ?>">
+                    <span><?= $escaper->escapeHtml(__('Back to Requests')) ?></span>
+                </a>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

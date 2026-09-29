@@ -1,0 +1,60 @@
+& when (@media-common = true) {
+    .aw-fei-sp-add {
+        .lib-css(margin-top, @indent__s);
+
+        &__message {
+            .lib-css(margin-top, @indent__xs);
+            .lib-css(color, @message-success__color);
+
+            &--error {
+                .lib-css(color, @error__color);
+            }
+        }
+    }
+
+    .aw-fei-sp-basket,
+    .aw-fei-sp-requests,
+    .aw-fei-sp-request {
+        .aw-fei-sp-table {
+            .qty {
+                .lib-css(width, 80px);
+            }
+        }
+    }
+
+    .aw-fei-sp-basket {
+        &__intro,
+        &__submit {
+            .lib-css(margin-bottom, @indent__m);
+        }
+    }
+
+    .aw-fei-sp-request__summary {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        column-gap: @indent__base;
+        row-gap: @indent__xs;
+        .lib-css(margin-bottom, @indent__m);
+
+        dt {
+            font-weight: @font-weight__semibold;
+        }
+
+        dd {
+            margin: 0;
+        }
+    }
+
+    .aw-fei-sp-status {
+        font-weight: @font-weight__semibold;
+
+        &--approved {
+            .lib-css(color, @message-success__color);
+        }
+
+        &--rejected,
+        &--expired {
+            .lib-css(color, @error__color);
+        }
+    }
+}

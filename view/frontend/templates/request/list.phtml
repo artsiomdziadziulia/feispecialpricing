@@ -1,0 +1,80 @@
+<?php
+declare(strict_types=1);
+
+use Aheadworks\FeiSpecialPricing\ViewModel\Formatter;
+use Aheadworks\FeiSpecialPricing\ViewModel\Request\ListView;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ListView $viewModel */
+/** @var Formatter $formatter */
+$viewModel = $block->getData('view_model');
+$formatter = $block->getData('formatter');
+$requests = $viewModel->getRequests();
+$showRequester = $viewModel->isCompanyAdmin();
+?>
+<div class="aw-fei-sp-requests">
+    <p>
+        <a class="action" href="<?= $escaper->escapeUrl($viewModel->getBasketUrl()) ?>">
+            <?= $escaper->escapeHtml(__('Special Pricing Basket (%1)', $viewModel->getBasketCount())) ?>
+        </a>
+    </p>
+
+    <?php if ($requests === []): ?>
+        <div class="message info empty">
+            <span><?= $escaper->escapeHtml(__('You have not submitted any special pricing requests yet.')) ?></span>
+        </div>
+    <?php else: ?>
+        <div class="table-wrapper">
+            <table class="data table aw-fei-sp-table">
+                <caption class="table-caption"><?= $escaper->escapeHtml(__('Special Pricing Requests')) ?></caption>
+                <thead>
+                <tr>
+                    <th scope="col"><?= $escaper->escapeHtml(__('Request #')) ?></th>
+                    <th scope="col"><?= $escaper->escapeHtml(__('Created')) ?></th>
+                    <?php if ($showRequester): ?>
+                        <th scope="col"><?= $escaper->escapeHtml(__('Requested By')) ?></th>
+                    <?php endif; ?>
+                    <th scope="col"><?= $escaper->escapeHtml(__('Status')) ?></th>
+                    <th scope="col"><?= $escaper->escapeHtml(__('Valid Until')) ?></th>
+                    <th scope="col"><span class="sr-only"><?= $escaper->escapeHtml(__('Actions')) ?></span></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($requests as $request): ?>
+                    <tr>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('Request #')) ?>">
+                            <?= (int) $request->getId() ?>
+                        </td>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('Created')) ?>">
+                            <?= $escaper->escapeHtml($formatter->formatDate($request->getCreatedAt())) ?>
+                        </td>
+                        <?php if ($showRequester): ?>
+                            <td data-th="<?= $escaper->escapeHtmlAttr(__('Requested By')) ?>">
+                                <?= $escaper->escapeHtml($viewModel->getCustomerName($request->getCustomerId())) ?>
+                            </td>
+                        <?php endif; ?>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('Status')) ?>">
+                            <span class="aw-fei-sp-status
+                                  aw-fei-sp-status--<?= $escaper->escapeHtmlAttr($request->getStatus()) ?>">
+                                <?= $escaper->escapeHtml($formatter->getStatusLabel($request->getStatus())) ?>
+                            </span>
+                        </td>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('Valid Until')) ?>">
+                            <?= $escaper->escapeHtml($formatter->formatDate($request->getExpiresAt(), true)) ?>
+                        </td>
+                        <td>
+                            <a class="action view"
+                               href="<?= $escaper->escapeUrl($viewModel->getViewUrl((int) $request->getId())) ?>">
+                                <span><?= $escaper->escapeHtml(__('View')) ?></span>
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
+</div>

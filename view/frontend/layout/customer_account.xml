@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="customer_account_navigation">
+            <block class="Aheadworks\FeiSpecialPricing\Block\Account\NavigationLink"
+                   name="customer.account.navigation.aw.fei.sp.requests"
+                   after="customer.account.navigation.aw.fei.pay.method">
+                <arguments>
+                    <argument name="path" xsi:type="string">aw_fei_sp/request/index</argument>
+                    <argument name="label" xsi:type="string" translate="true">Special Pricing Requests</argument>
+                </arguments>
+            </block>
+            <block class="Aheadworks\FeiSpecialPricing\Block\Account\NavigationLink"
+                   name="customer.account.navigation.aw.fei.sp.basket"
+                   after="customer.account.navigation.aw.fei.sp.requests">
+                <arguments>
+                    <argument name="path" xsi:type="string">aw_fei_sp/basket/index</argument>
+                    <argument name="label" xsi:type="string" translate="true">Special Pricing Basket</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

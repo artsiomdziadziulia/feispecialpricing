@@ -1,0 +1,78 @@
+{
+    "aw_fei_sp_basket_item": {
+        "column": {
+            "id": true,
+            "customer_id": true,
+            "product_id": true,
+            "qty": true,
+            "buy_request": true,
+            "created_at": true
+        },
+        "index": {
+            "AW_FEI_SP_BASKET_ITEM_CUSTOMER_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "AW_FEI_SP_BASKET_ITEM_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "AW_FEI_SP_BASKET_ITEM_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true
+        }
+    },
+    "aw_fei_sp_request": {
+        "column": {
+            "id": true,
+            "company_id": true,
+            "customer_id": true,
+            "store_id": true,
+            "status": true,
+            "customer_comment": true,
+            "admin_comment": true,
+            "expires_at": true,
+            "order_id": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "AW_FEI_SP_REQUEST_COMPANY_ID": true,
+            "AW_FEI_SP_REQUEST_CUSTOMER_ID": true,
+            "AW_FEI_SP_REQUEST_STATUS_EXPIRES_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "AW_FEI_SP_REQUEST_COMPANY_ID_AW_CA_COMPANY_ID": true,
+            "AW_FEI_SP_REQUEST_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "AW_FEI_SP_REQUEST_STORE_ID_STORE_STORE_ID": true,
+            "AW_FEI_SP_REQUEST_ORDER_ID_SALES_ORDER_ENTITY_ID": true
+        }
+    },
+    "aw_fei_sp_request_item": {
+        "column": {
+            "id": true,
+            "request_id": true,
+            "product_id": true,
+            "sku": true,
+            "name": true,
+            "qty": true,
+            "original_price": true,
+            "special_price": true,
+            "buy_request": true
+        },
+        "index": {
+            "AW_FEI_SP_REQUEST_ITEM_REQUEST_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "AW_FEI_SP_REQUEST_ITEM_REQUEST_ID_AW_FEI_SP_REQUEST_ID": true,
+            "AW_FEI_SP_REQUEST_ITEM_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true
+        }
+    },
+    "quote_item": {
+        "column": {
+            "aw_fei_sp_request_item_id": true
+        }
+    },
+    "sales_order_item": {
+        "column": {
+            "aw_fei_sp_request_item_id": true
+        }
+    }
+}

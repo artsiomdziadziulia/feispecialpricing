@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">aw_fei_sp_request_listing.aw_fei_sp_request_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>aw_fei_sp_request_columns</spinner>
+        <deps>
+            <dep>aw_fei_sp_request_listing.aw_fei_sp_request_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="aw_fei_sp_request_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Aheadworks_FeiSpecialPricing::requests</aclResource>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"
+                      name="aw_fei_sp_request_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters"/>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="aw_fei_sp_request_columns">
+        <column name="id" sortOrder="10">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Request #</label>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+        <column name="company_name" sortOrder="20">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Company</label>
+            </settings>
+        </column>
+        <column name="customer_name" sortOrder="30">
+            <settings>
+                <label translate="true">Requested By</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="customer_email" sortOrder="40">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Email</label>
+            </settings>
+        </column>
+        <column name="items_count" sortOrder="50">
+            <settings>
+                <label translate="true">Items</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="status" component="Magento_Ui/js/grid/columns/select" sortOrder="60">
+            <settings>
+                <filter>select</filter>
+                <options class="Aheadworks\FeiSpecialPricing\Model\Source\Status"/>
+                <dataType>select</dataType>
+                <label translate="true">Status</label>
+            </settings>
+        </column>
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date" sortOrder="70">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Created</label>
+            </settings>
+        </column>
+        <column name="expires_at" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date" sortOrder="80">
+            <settings>
+                <dataType>date</dataType>
+                <label translate="true">Valid Until</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="Aheadworks\FeiSpecialPricing\Ui\Component\Listing\Column\RequestActions"
+                       sortOrder="200">
+            <settings>
+                <indexField>id</indexField>
+                <label translate="true">Action</label>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

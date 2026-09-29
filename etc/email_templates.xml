@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="aw_fei_special_pricing_email_new_request_template"
+              label="FEI Special Pricing: New Request"
+              file="new_request.html" type="html" module="Aheadworks_FeiSpecialPricing" area="frontend"/>
+    <template id="aw_fei_special_pricing_email_approved_template"
+              label="FEI Special Pricing: Request Approved"
+              file="approved.html" type="html" module="Aheadworks_FeiSpecialPricing" area="frontend"/>
+    <template id="aw_fei_special_pricing_email_rejected_template"
+              label="FEI Special Pricing: Request Rejected"
+              file="rejected.html" type="html" module="Aheadworks_FeiSpecialPricing" area="frontend"/>
+</config>
