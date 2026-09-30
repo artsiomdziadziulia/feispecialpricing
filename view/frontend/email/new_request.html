@@ -5,8 +5,7 @@
 "var customer_name":"Requester Name",
 "var customer_email":"Requester Email",
 "var customer_comment":"Customer Comment",
-"var items_html|raw":"Items Table",
-"var review_url":"Admin Review URL"
+"var items_html|raw":"Items Table"
 } @-->
 {{template config_path="design/email/header_template"}}
 
@@ -21,7 +20,5 @@
 {{/depend}}
 
 {{var items_html|raw}}
-
-<p><a href="{{var review_url}}">{{trans "Review the request in the admin panel"}}</a></p>
 
 {{template config_path="design/email/footer_template"}}

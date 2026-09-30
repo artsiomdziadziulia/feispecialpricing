@@ -18,30 +18,6 @@
     <preference for="Aheadworks\FeiSpecialPricing\Api\RequestManagementInterface"
                 type="Aheadworks\FeiSpecialPricing\Model\Service\RequestManagement"/>
 
-    <type name="Aheadworks\FeiSpecialPricing\Model\ResourceModel\Request\Grid\Collection">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">aw_fei_sp_request</argument>
-            <argument name="resourceModel" xsi:type="string">Aheadworks\FeiSpecialPricing\Model\ResourceModel\Request</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
-        <arguments>
-            <argument name="collections" xsi:type="array">
-                <item name="aw_fei_sp_request_listing_data_source" xsi:type="string">Aheadworks\FeiSpecialPricing\Model\ResourceModel\Request\Grid\Collection</item>
-            </argument>
-        </arguments>
-    </type>
-
-    <type name="Aheadworks\FeiSpecialPricing\Model\Service\Request\PostDataProcessor\Composite">
-        <arguments>
-            <argument name="processors" xsi:type="array">
-                <item name="item_prices" xsi:type="object">Aheadworks\FeiSpecialPricing\Model\Service\Request\PostDataProcessor\ItemPrices</item>
-                <item name="expiration_date" xsi:type="object">Aheadworks\FeiSpecialPricing\Model\Service\Request\PostDataProcessor\ExpirationDate</item>
-                <item name="admin_comment" xsi:type="object">Aheadworks\FeiSpecialPricing\Model\Service\Request\PostDataProcessor\AdminComment</item>
-            </argument>
-        </arguments>
-    </type>
-
     <type name="Aheadworks\Ca\Model\Authorization\Acl\ResourceMapper">
         <arguments>
             <argument name="map" xsi:type="array">

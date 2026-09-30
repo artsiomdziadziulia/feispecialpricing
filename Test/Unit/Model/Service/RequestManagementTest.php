@@ -10,7 +10,7 @@ use Aheadworks\FeiSpecialPricing\Api\RequestRepositoryInterface;
 use Aheadworks\FeiSpecialPricing\Model\Data\ItemPrice;
 use Aheadworks\FeiSpecialPricing\Model\ResourceModel\RequestItem\Collection as ItemCollection;
 use Aheadworks\FeiSpecialPricing\Model\ResourceModel\RequestItem\CollectionFactory as ItemCollectionFactory;
-use Aheadworks\FeiSpecialPricing\Model\Service\Request\PostDataProcessor\ExpirationDate;
+use Aheadworks\FeiSpecialPricing\Model\Service\Request\ExpirationDateResolver;
 use Aheadworks\FeiSpecialPricing\Model\Service\RequestDecisionService;
 use Aheadworks\FeiSpecialPricing\Model\Service\RequestManagement;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -36,7 +36,7 @@ class RequestManagementTest extends TestCase
     private MockObject $itemCollectionFactoryMock;
 
     /**
-     * @var ExpirationDate&MockObject
+     * @var ExpirationDateResolver&MockObject
      */
     private MockObject $expirationDateMock;
 
@@ -55,7 +55,7 @@ class RequestManagementTest extends TestCase
         $this->repositoryMock = $this->createMock(RequestRepositoryInterface::class);
         $this->decisionServiceMock = $this->createMock(RequestDecisionService::class);
         $this->itemCollectionFactoryMock = $this->createMock(ItemCollectionFactory::class);
-        $this->expirationDateMock = $this->createMock(ExpirationDate::class);
+        $this->expirationDateMock = $this->createMock(ExpirationDateResolver::class);
 
         $this->management = new RequestManagement(
             $this->repositoryMock,
@@ -73,9 +73,9 @@ class RequestManagementTest extends TestCase
     public function testApproveDelegatesPricesAndExpiration(): void
     {
         $this->repositoryMock->method('getById')->with(7)->willReturn($this->createRequest(7, [11, 12]));
-        $this->expirationDateMock->method('process')
-            ->with([ExpirationDate::KEY => '2026-12-31'])
-            ->willReturn([ExpirationDate::KEY => '2026-12-31 21:59:59']);
+        $this->expirationDateMock->method('resolve')
+            ->with('2026-12-31')
+            ->willReturn('2026-12-31 21:59:59');
 
         $approved = $this->createMock(RequestInterface::class);
         $this->decisionServiceMock->expects($this->once())

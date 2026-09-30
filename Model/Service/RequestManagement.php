@@ -10,7 +10,7 @@ use Aheadworks\FeiSpecialPricing\Api\Data\RequestSearchResultsInterface;
 use Aheadworks\FeiSpecialPricing\Api\RequestManagementInterface;
 use Aheadworks\FeiSpecialPricing\Api\RequestRepositoryInterface;
 use Aheadworks\FeiSpecialPricing\Model\ResourceModel\RequestItem\CollectionFactory as ItemCollectionFactory;
-use Aheadworks\FeiSpecialPricing\Model\Service\Request\PostDataProcessor\ExpirationDate;
+use Aheadworks\FeiSpecialPricing\Model\Service\Request\ExpirationDateResolver;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -20,13 +20,13 @@ class RequestManagement implements RequestManagementInterface
      * @param RequestRepositoryInterface $requestRepository
      * @param RequestDecisionService $decisionService
      * @param ItemCollectionFactory $itemCollectionFactory
-     * @param ExpirationDate $expirationDate
+     * @param ExpirationDateResolver $expirationDateResolver
      */
     public function __construct(
         private readonly RequestRepositoryInterface $requestRepository,
         private readonly RequestDecisionService $decisionService,
         private readonly ItemCollectionFactory $itemCollectionFactory,
-        private readonly ExpirationDate $expirationDate
+        private readonly ExpirationDateResolver $expirationDateResolver
     ) {
     }
 
@@ -109,12 +109,10 @@ class RequestManagement implements RequestManagementInterface
             $specialPrices[$itemId] = $itemPrice->getSpecialPrice();
         }
 
-        $expiration = $this->expirationDate->process([ExpirationDate::KEY => (string) $expiresAt]);
-
         return $this->decisionService->approve(
             $requestId,
             $specialPrices,
-            $expiration[ExpirationDate::KEY],
+            $this->expirationDateResolver->resolve($expiresAt),
             $adminComment
         );
     }

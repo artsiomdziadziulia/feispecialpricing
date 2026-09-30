@@ -11,7 +11,6 @@ use Aheadworks\FeiSpecialPricing\Model\Email\ItemsRenderer;
 use Aheadworks\FeiSpecialPricing\Model\Email\Notifier;
 use Aheadworks\FeiSpecialPricing\Model\Request\Status;
 use Aheadworks\FeiSpecialPricing\ViewModel\Formatter;
-use Magento\Backend\Model\UrlInterface as BackendUrl;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Mail\Template\TransportBuilder;
@@ -75,8 +74,7 @@ class NotifierTest extends TestCase
             $companyRepository,
             $this->createMock(ItemsRenderer::class),
             $this->createMock(Formatter::class),
-            $this->createMock(UrlInterface::class),
-            $this->createMock(BackendUrl::class)
+            $this->createMock(UrlInterface::class)
         );
     }
 

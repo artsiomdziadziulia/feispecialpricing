@@ -8,7 +8,6 @@ use Aheadworks\FeiSpecialPricing\Api\Data\RequestInterface;
 use Aheadworks\FeiSpecialPricing\Model\Config;
 use Aheadworks\FeiSpecialPricing\Model\Request\Status;
 use Aheadworks\FeiSpecialPricing\ViewModel\Formatter;
-use Magento\Backend\Model\UrlInterface as BackendUrl;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\Area;
 use Magento\Framework\Exception\LocalizedException;
@@ -27,7 +26,6 @@ class Notifier
      * @param ItemsRenderer $itemsRenderer
      * @param Formatter $formatter
      * @param UrlInterface $urlBuilder
-     * @param BackendUrl $backendUrl
      */
     public function __construct(
         private readonly Config $config,
@@ -37,8 +35,7 @@ class Notifier
         private readonly CompanyRepositoryInterface $companyRepository,
         private readonly ItemsRenderer $itemsRenderer,
         private readonly Formatter $formatter,
-        private readonly UrlInterface $urlBuilder,
-        private readonly BackendUrl $backendUrl
+        private readonly UrlInterface $urlBuilder
     ) {
     }
 
@@ -66,10 +63,6 @@ class Notifier
             'customer_email' => $customer->getEmail(),
             'customer_comment' => (string) $request->getCustomerComment(),
             'items_html' => $this->itemsRenderer->render($request),
-            'review_url' => $this->backendUrl->getUrl(
-                'aw_fei_sp_admin/request/edit',
-                ['id' => $request->getId(), '_nosecret' => true]
-            ),
         ];
 
         $this->send(
