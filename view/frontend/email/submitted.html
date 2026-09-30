@@ -1,0 +1,24 @@
+<!--@subject {{trans "Your special pricing request #%request_id was submitted" request_id=$request_id}} @-->
+<!--@vars {
+"var request_id":"Request ID",
+"var company_name":"Company Name",
+"var customer_name":"Requester Name",
+"var customer_comment":"Customer Comment",
+"var items_html|raw":"Items Table",
+"var view_url":"Request URL"
+} @-->
+{{template config_path="design/email/header_template"}}
+
+<p>{{trans "Hello %name," name=$customer_name}}</p>
+<p>{{trans "Your special pricing request #%request_id was sent to FEI. You will receive an email when FEI reviews it." request_id=$request_id}}</p>
+
+{{var items_html|raw}}
+
+{{depend customer_comment}}
+<p><strong>{{trans "Your comment:"}}</strong><br/>{{var customer_comment}}</p>
+{{/depend}}
+
+<p>{{trans "The request PDF is attached to this email."}}</p>
+<p><a href="{{var view_url}}">{{trans "View the request in your account"}}</a></p>
+
+{{template config_path="design/email/footer_template"}}

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="search_result_list">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="aw.fei.sp.search.list.button"
+                   as="aw_fei_sp_list_button"
+                   template="Aheadworks_FeiSpecialPricing::product/list/add_button.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Aheadworks\FeiSpecialPricing\ViewModel\AddButton</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

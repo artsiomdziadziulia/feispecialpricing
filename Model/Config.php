@@ -12,6 +12,7 @@ class Config
     public const string XML_PATH_EMAIL_SENDER = 'aw_fei_special_pricing/email/sender';
     public const string XML_PATH_FEI_RECIPIENTS = 'aw_fei_special_pricing/email/fei_recipients';
     public const string XML_PATH_TEMPLATE_NEW_REQUEST = 'aw_fei_special_pricing/email/new_request_template';
+    public const string XML_PATH_TEMPLATE_SUBMITTED = 'aw_fei_special_pricing/email/submitted_template';
     public const string XML_PATH_TEMPLATE_APPROVED = 'aw_fei_special_pricing/email/approved_template';
     public const string XML_PATH_TEMPLATE_REJECTED = 'aw_fei_special_pricing/email/rejected_template';
 

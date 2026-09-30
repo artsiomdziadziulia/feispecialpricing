@@ -4,6 +4,9 @@
     <template id="aw_fei_special_pricing_email_new_request_template"
               label="FEI Special Pricing: New Request"
               file="new_request.html" type="html" module="Aheadworks_FeiSpecialPricing" area="frontend"/>
+    <template id="aw_fei_special_pricing_email_submitted_template"
+              label="FEI Special Pricing: Request Submitted (Customer Confirmation)"
+              file="submitted.html" type="html" module="Aheadworks_FeiSpecialPricing" area="frontend"/>
     <template id="aw_fei_special_pricing_email_approved_template"
               label="FEI Special Pricing: Request Approved"
               file="approved.html" type="html" module="Aheadworks_FeiSpecialPricing" area="frontend"/>

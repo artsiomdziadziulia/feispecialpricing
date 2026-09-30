@@ -4,9 +4,8 @@
     <system>
         <section id="aw_fei_special_pricing" translate="label" type="text" sortOrder="200"
                  showInDefault="1" showInWebsite="1" showInStore="1">
-            <class>separator-top</class>
             <label>FEI Special Pricing</label>
-            <tab>customer</tab>
+            <tab>aheadworks</tab>
             <resource>Aheadworks_FeiSpecialPricing::config</resource>
             <group id="general" translate="label" type="text" sortOrder="10"
                    showInDefault="1" showInWebsite="1" showInStore="1">
@@ -23,8 +22,8 @@
                 <label>Email Notifications</label>
                 <field id="fei_recipients" translate="label comment" type="text" sortOrder="10"
                        showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>FEI Approver Emails</label>
-                    <comment>Comma-separated. These addresses receive new special pricing requests.</comment>
+                    <label>Special Price Emails</label>
+                    <comment>Comma-separated. Only these addresses receive new requests (with PDF).</comment>
                 </field>
                 <field id="sender" translate="label" type="select" sortOrder="20"
                        showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -34,6 +33,11 @@
                 <field id="new_request_template" translate="label" type="select" sortOrder="30"
                        showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>New Request Template (to FEI)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+                <field id="submitted_template" translate="label" type="select" sortOrder="35"
+                       showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Request Submitted Template (to customer)</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="approved_template" translate="label" type="select" sortOrder="40"

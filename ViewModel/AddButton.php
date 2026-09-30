@@ -29,6 +29,19 @@ class AddButton implements ArgumentInterface
     }
 
     /**
+     * Return the product page URL when options must be chosen there (listing button); empty otherwise.
+     *
+     * @param Product $product
+     * @return string
+     */
+    public function getOptionsPageUrl(Product $product): string
+    {
+        $requiresOptions = $product->isComposite() || $product->getTypeInstance()->hasRequiredOptions($product);
+
+        return $requiresOptions ? (string) $product->getProductUrl() : '';
+    }
+
+    /**
      * Return AJAX add URL.
      *
      * @return string

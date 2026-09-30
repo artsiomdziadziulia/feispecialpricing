@@ -10,6 +10,7 @@ use Aheadworks\FeiSpecialPricing\Api\RequestRepositoryInterface;
 use Aheadworks\FeiSpecialPricing\Model\Data\ItemPrice;
 use Aheadworks\FeiSpecialPricing\Model\ResourceModel\RequestItem\Collection as ItemCollection;
 use Aheadworks\FeiSpecialPricing\Model\ResourceModel\RequestItem\CollectionFactory as ItemCollectionFactory;
+use Aheadworks\FeiSpecialPricing\Model\Service\Request\ContactDataLoader;
 use Aheadworks\FeiSpecialPricing\Model\Service\Request\ExpirationDateResolver;
 use Aheadworks\FeiSpecialPricing\Model\Service\RequestDecisionService;
 use Aheadworks\FeiSpecialPricing\Model\Service\RequestManagement;
@@ -41,6 +42,11 @@ class RequestManagementTest extends TestCase
     private MockObject $expirationDateMock;
 
     /**
+     * @var ContactDataLoader&MockObject
+     */
+    private MockObject $contactDataLoaderMock;
+
+    /**
      * @var RequestManagement
      */
     private RequestManagement $management;
@@ -56,12 +62,14 @@ class RequestManagementTest extends TestCase
         $this->decisionServiceMock = $this->createMock(RequestDecisionService::class);
         $this->itemCollectionFactoryMock = $this->createMock(ItemCollectionFactory::class);
         $this->expirationDateMock = $this->createMock(ExpirationDateResolver::class);
+        $this->contactDataLoaderMock = $this->createMock(ContactDataLoader::class);
 
         $this->management = new RequestManagement(
             $this->repositoryMock,
             $this->decisionServiceMock,
             $this->itemCollectionFactoryMock,
-            $this->expirationDateMock
+            $this->expirationDateMock,
+            $this->contactDataLoaderMock
         );
     }
 
@@ -122,6 +130,8 @@ class RequestManagementTest extends TestCase
             ->with(7, 'No')
             ->willReturn($rejected);
 
+        $this->contactDataLoaderMock->expects($this->once())->method('load')->with([$rejected]);
+
         $this->assertSame($rejected, $this->management->reject(7, 'No'));
     }
 
@@ -152,6 +162,7 @@ class RequestManagementTest extends TestCase
 
         $first->expects($this->once())->method('setItems')->with([$item]);
         $second->expects($this->once())->method('setItems')->with([]);
+        $this->contactDataLoaderMock->expects($this->once())->method('load')->with([$first, $second]);
 
         $this->assertSame(
             $searchResults,

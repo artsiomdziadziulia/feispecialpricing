@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+use Aheadworks\FeiSpecialPricing\ViewModel\AddButton;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var AddButton $viewModel */
+$viewModel = $block->getData('view_model');
+/** @var Product|null $product */
+$product = $block->getData('product');
+?>
+<?php if ($viewModel->isRenderable($product)): ?>
+    <div class="aw-fei-sp-add aw-fei-sp-add--list"
+         hidden
+         data-mage-init='<?= $escaper->escapeHtmlAttr(json_encode([
+             'awFeiSpecialPricingAdd' => [
+                 'addUrl' => $viewModel->getAddUrl(),
+                 'basketUrl' => $viewModel->getBasketUrl(),
+                 'productId' => (int) $product->getId(),
+                 'formSelector' => '',
+                 'productUrl' => $viewModel->getOptionsPageUrl($product),
+             ],
+         ])) ?>'>
+        <button type="button" class="action secondary aw-fei-sp-add__button" data-role="aw-fei-sp-add">
+            <span><?= $escaper->escapeHtml(__('Add to Special Pricing')) ?></span>
+        </button>
+        <div class="aw-fei-sp-add__message" data-role="aw-fei-sp-message" role="status" aria-live="polite"></div>
+    </div>
+<?php endif; ?>

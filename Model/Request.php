@@ -254,4 +254,67 @@ class Request extends AbstractModel implements RequestInterface
     {
         return $this->setData(self::ITEMS, array_values($items));
     }
+
+    /**
+     * Return requester full name.
+     *
+     * @return string|null
+     */
+    public function getCustomerName(): ?string
+    {
+        return $this->getData(self::CUSTOMER_NAME);
+    }
+
+    /**
+     * Set requester full name.
+     *
+     * @param string|null $name
+     * @return $this
+     */
+    public function setCustomerName(?string $name): self
+    {
+        return $this->setData(self::CUSTOMER_NAME, $name);
+    }
+
+    /**
+     * Return requester email.
+     *
+     * @return string|null
+     */
+    public function getCustomerEmail(): ?string
+    {
+        return $this->getData(self::CUSTOMER_EMAIL);
+    }
+
+    /**
+     * Set requester email.
+     *
+     * @param string|null $email
+     * @return $this
+     */
+    public function setCustomerEmail(?string $email): self
+    {
+        return $this->setData(self::CUSTOMER_EMAIL, $email);
+    }
+
+    /**
+     * Return agency (company) name.
+     *
+     * @return string|null
+     */
+    public function getCompanyName(): ?string
+    {
+        return $this->getData(self::COMPANY_NAME);
+    }
+
+    /**
+     * Set agency (company) name.
+     *
+     * @param string|null $name
+     * @return $this
+     */
+    public function setCompanyName(?string $name): self
+    {
+        return $this->setData(self::COMPANY_NAME, $name);
+    }
 }

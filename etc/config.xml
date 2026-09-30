@@ -9,6 +9,7 @@
             <email>
                 <sender>general</sender>
                 <new_request_template>aw_fei_special_pricing_email_new_request_template</new_request_template>
+                <submitted_template>aw_fei_special_pricing_email_submitted_template</submitted_template>
                 <approved_template>aw_fei_special_pricing_email_approved_template</approved_template>
                 <rejected_template>aw_fei_special_pricing_email_rejected_template</rejected_template>
             </email>

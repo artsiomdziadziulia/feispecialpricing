@@ -1,0 +1,115 @@
+<?php
+declare(strict_types=1);
+
+use Aheadworks\FeiSpecialPricing\Api\Data\RequestInterface;
+use Aheadworks\FeiSpecialPricing\ViewModel\Formatter;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var RequestInterface $request */
+$request = $block->getData('request');
+/** @var Formatter $formatter */
+$formatter = $block->getData('formatter');
+$logoPath = $block->getData('logo_path');
+?>
+<html>
+<head>
+    <style>
+        body { font-family: sans-serif; font-size: 10pt; color: #333; }
+        .header td { vertical-align: top; }
+        .title { font-size: 18pt; font-weight: bold; }
+        .meta td { padding: 2px 8px 2px 0; }
+        .comment { margin-top: 16px; padding: 8px; background: #f7f7f7; }
+        table.items { width: 100%; border-collapse: collapse; margin-top: 16px; }
+        table.items th { background: #f0f0f0; text-align: left; padding: 6px; border-bottom: 1px solid #ccc; }
+        table.items td { padding: 6px; border-bottom: 1px solid #eee; vertical-align: top; }
+        .num { text-align: right; }
+        table.items th.num { text-align: right; }
+        .grand td { font-weight: bold; border-top: 1px solid #333; }
+        .footer { margin-top: 24px; font-size: 8pt; color: #777; }
+    </style>
+</head>
+<body>
+<table class="header" width="100%">
+    <tr>
+        <td>
+            <?php if ($logoPath): ?>
+                <img src="<?= $escaper->escapeHtmlAttr($logoPath) ?>" height="50"/><br/>
+            <?php endif; ?>
+            <strong><?= $escaper->escapeHtml($block->getData('store_name')) ?></strong>
+        </td>
+        <td align="right">
+            <div class="title"><?= $escaper->escapeHtml(__('Special Pricing Request')) ?></div>
+            <table class="meta" align="right">
+                <tr>
+                    <td><?= $escaper->escapeHtml(__('Request #')) ?></td>
+                    <td><?= (int) $request->getId() ?></td>
+                </tr>
+                <tr>
+                    <td><?= $escaper->escapeHtml(__('Date')) ?></td>
+                    <td><?= $escaper->escapeHtml($block->getData('date')) ?></td>
+                </tr>
+                <?php if ((string) $request->getCompanyName() !== ''): ?>
+                    <tr>
+                        <td><?= $escaper->escapeHtml(__('Agency')) ?></td>
+                        <td><?= $escaper->escapeHtml($request->getCompanyName()) ?></td>
+                    </tr>
+                <?php endif; ?>
+                <tr>
+                    <td><?= $escaper->escapeHtml(__('Requested by')) ?></td>
+                    <td>
+                        <?= $escaper->escapeHtml((string) $request->getCustomerName()) ?><br/>
+                        <?= $escaper->escapeHtml((string) $request->getCustomerEmail()) ?>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<?php if ((string) $request->getCustomerComment() !== ''): ?>
+    <div class="comment">
+        <strong><?= $escaper->escapeHtml(__('Comment')) ?>:</strong><br/>
+        <?= /* @noEscape */ nl2br($escaper->escapeHtml($request->getCustomerComment())) ?>
+    </div>
+<?php endif; ?>
+
+<table class="items">
+    <thead>
+    <tr>
+        <th><?= $escaper->escapeHtml(__('Product')) ?></th>
+        <th><?= $escaper->escapeHtml(__('SKU')) ?></th>
+        <th class="num"><?= $escaper->escapeHtml(__('Qty')) ?></th>
+        <th class="num"><?= $escaper->escapeHtml(__('Regular Price')) ?></th>
+        <th class="num"><?= $escaper->escapeHtml(__('Subtotal')) ?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($request->getItems() as $item): ?>
+        <?php $rowTotal = (float) $item->getOriginalPrice() * $item->getQty(); ?>
+        <tr>
+            <td><?= $escaper->escapeHtml($item->getName()) ?></td>
+            <td><?= $escaper->escapeHtml($item->getSku()) ?></td>
+            <td class="num"><?= $escaper->escapeHtml($formatter->formatQty($item->getQty())) ?></td>
+            <td class="num"><?= $escaper->escapeHtml($formatter->formatPrice($item->getOriginalPrice())) ?></td>
+            <td class="num"><?= $escaper->escapeHtml($formatter->formatPrice($rowTotal)) ?></td>
+        </tr>
+    <?php endforeach; ?>
+    <tr class="grand">
+        <td colspan="4" class="num"><?= $escaper->escapeHtml(__('Total at Regular Prices')) ?></td>
+        <td class="num">
+            <?= $escaper->escapeHtml($formatter->formatPrice((float) $block->getData('regular_total'))) ?>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="footer">
+    <?= $escaper->escapeHtml(
+        __('Regular prices at the time of the request. Special prices are set by FEI after review.')
+    ) ?>
+</div>
+</body>
+</html>

@@ -8,4 +8,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Block\Product\ListProduct">
+        <plugin name="aw_fei_sp_list_add_button"
+                type="Aheadworks\FeiSpecialPricing\Plugin\Catalog\ProductList\AddButtonPlugin"
+                sortOrder="100"/>
+    </type>
 </config>

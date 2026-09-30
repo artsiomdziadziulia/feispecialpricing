@@ -16,6 +16,7 @@ define([
             basketUrl: '',
             productId: 0,
             formSelector: '#product_addtocart_form',
+            productUrl: '',
             buttonSelector: '[data-role="aw-fei-sp-add"]',
             messageSelector: '[data-role="aw-fei-sp-message"]',
             sectionName: 'aw-fei-sp'
@@ -69,13 +70,20 @@ define([
         },
 
         /**
-         * Validate product options and send them to the basket.
+         * Validate product options and send them to the basket; products with required options
+         * in listings are sent to the product page to choose them.
          *
          * @private
          */
         _onClick: function () {
-            var form = $(this.options.formSelector),
+            var form = this.options.formSelector ? $(this.options.formSelector) : $(),
                 payload;
+
+            if (this.options.productUrl) {
+                window.location.href = this.options.productUrl;
+
+                return;
+            }
 
             if (form.length) {
                 if (form.data('mageValidation') && !form.validation('isValid')) {

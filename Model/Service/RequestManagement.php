@@ -10,6 +10,7 @@ use Aheadworks\FeiSpecialPricing\Api\Data\RequestSearchResultsInterface;
 use Aheadworks\FeiSpecialPricing\Api\RequestManagementInterface;
 use Aheadworks\FeiSpecialPricing\Api\RequestRepositoryInterface;
 use Aheadworks\FeiSpecialPricing\Model\ResourceModel\RequestItem\CollectionFactory as ItemCollectionFactory;
+use Aheadworks\FeiSpecialPricing\Model\Service\Request\ContactDataLoader;
 use Aheadworks\FeiSpecialPricing\Model\Service\Request\ExpirationDateResolver;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -21,20 +22,23 @@ class RequestManagement implements RequestManagementInterface
      * @param RequestDecisionService $decisionService
      * @param ItemCollectionFactory $itemCollectionFactory
      * @param ExpirationDateResolver $expirationDateResolver
+     * @param ContactDataLoader $contactDataLoader
      */
     public function __construct(
         private readonly RequestRepositoryInterface $requestRepository,
         private readonly RequestDecisionService $decisionService,
         private readonly ItemCollectionFactory $itemCollectionFactory,
-        private readonly ExpirationDateResolver $expirationDateResolver
+        private readonly ExpirationDateResolver $expirationDateResolver,
+        private readonly ContactDataLoader $contactDataLoader
     ) {
     }
 
     /**
-     * Return special pricing requests with their items loaded in one query.
+     * Return special pricing requests with their items and contact data loaded in batch.
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return RequestSearchResultsInterface
+     * @throws LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria): RequestSearchResultsInterface
     {
@@ -58,20 +62,22 @@ class RequestManagement implements RequestManagementInterface
         foreach ($requests as $request) {
             $request->setItems($itemsByRequest[(int) $request->getId()] ?? []);
         }
+        $this->contactDataLoader->load($requests);
 
         return $searchResults;
     }
 
     /**
-     * Return a special pricing request with its items.
+     * Return a special pricing request with its items and contact data.
      *
      * @param int $requestId
      * @return RequestInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws LocalizedException
      */
     public function get(int $requestId): RequestInterface
     {
-        return $this->requestRepository->getById($requestId);
+        return $this->withContactData($this->requestRepository->getById($requestId));
     }
 
     /**
@@ -109,12 +115,12 @@ class RequestManagement implements RequestManagementInterface
             $specialPrices[$itemId] = $itemPrice->getSpecialPrice();
         }
 
-        return $this->decisionService->approve(
+        return $this->withContactData($this->decisionService->approve(
             $requestId,
             $specialPrices,
             $this->expirationDateResolver->resolve($expiresAt),
             $adminComment
-        );
+        ));
     }
 
     /**
@@ -129,6 +135,20 @@ class RequestManagement implements RequestManagementInterface
      */
     public function reject(int $requestId, ?string $adminComment = null): RequestInterface
     {
-        return $this->decisionService->reject($requestId, $adminComment);
+        return $this->withContactData($this->decisionService->reject($requestId, $adminComment));
+    }
+
+    /**
+     * Attach requester and agency contact data to a single request.
+     *
+     * @param RequestInterface $request
+     * @return RequestInterface
+     * @throws LocalizedException
+     */
+    private function withContactData(RequestInterface $request): RequestInterface
+    {
+        $this->contactDataLoader->load([$request]);
+
+        return $request;
     }
 }

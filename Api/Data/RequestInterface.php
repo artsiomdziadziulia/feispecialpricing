@@ -17,6 +17,9 @@ interface RequestInterface
     public const string CREATED_AT = 'created_at';
     public const string UPDATED_AT = 'updated_at';
     public const string ITEMS = 'items';
+    public const string CUSTOMER_NAME = 'customer_name';
+    public const string CUSTOMER_EMAIL = 'customer_email';
+    public const string COMPANY_NAME = 'company_name';
 
     /**
      * Return entity ID.
@@ -173,4 +176,49 @@ interface RequestInterface
      * @return $this
      */
     public function setItems(array $items): self;
+
+    /**
+     * Return requester full name (read-only, resolved from the customer account).
+     *
+     * @return string|null
+     */
+    public function getCustomerName(): ?string;
+
+    /**
+     * Set requester full name.
+     *
+     * @param string|null $name
+     * @return $this
+     */
+    public function setCustomerName(?string $name): self;
+
+    /**
+     * Return requester email (read-only, resolved from the customer account).
+     *
+     * @return string|null
+     */
+    public function getCustomerEmail(): ?string;
+
+    /**
+     * Set requester email.
+     *
+     * @param string|null $email
+     * @return $this
+     */
+    public function setCustomerEmail(?string $email): self;
+
+    /**
+     * Return agency (company) name (read-only, resolved from the company).
+     *
+     * @return string|null
+     */
+    public function getCompanyName(): ?string;
+
+    /**
+     * Set agency (company) name.
+     *
+     * @param string|null $name
+     * @return $this
+     */
+    public function setCompanyName(?string $name): self;
 }

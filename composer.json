@@ -9,11 +9,10 @@
     "require": {
         "php": ">=8.2",
         "magento/framework": "*",
-        "magento/module-backend": "*",
         "magento/module-catalog": "*",
+        "magento/module-config": "*",
         "magento/module-customer": "*",
         "magento/module-store": "*",
-        "magento/module-ui": "*",
         "magento/module-checkout": "*",
         "magento/module-configurable-product": "*",
         "magento/module-quote": "*",
