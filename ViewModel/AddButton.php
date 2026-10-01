@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Aheadworks\FeiSpecialPricing\ViewModel;
 
 use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
@@ -39,6 +41,28 @@ class AddButton implements ArgumentInterface
         $requiresOptions = $product->isComposite() || $product->getTypeInstance()->hasRequiredOptions($product);
 
         return $requiresOptions ? (string) $product->getProductUrl() : '';
+    }
+
+    /**
+     * Return configurable attribute ids that, once all chosen in a listing, allow adding without the product page.
+     *
+     * @param Product $product
+     * @return int[]
+     */
+    public function getQuickAddAttributeIds(Product $product): array
+    {
+        $type = $product->getTypeInstance();
+        if (!$type instanceof Configurable || $type->hasRequiredOptions($product)) {
+            return [];
+        }
+
+        $attributeIds = [];
+        /** @var Attribute $attribute */
+        foreach ($type->getConfigurableAttributes($product) as $attribute) {
+            $attributeIds[] = (int) $attribute->getAttributeId();
+        }
+
+        return $attributeIds;
     }
 
     /**

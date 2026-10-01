@@ -6,6 +6,8 @@ namespace Aheadworks\FeiSpecialPricing\Test\Unit\ViewModel;
 use Aheadworks\FeiSpecialPricing\ViewModel\AddButton;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -65,5 +67,73 @@ class AddButtonTest extends TestCase
             'configurable / bundle / grouped' => [true, false, 'https://store/bag.html'],
             'simple with required custom options' => [false, true, 'https://store/bag.html'],
         ];
+    }
+
+    /**
+     * Configurable products without required custom options expose their attribute ids for quick add.
+     *
+     * @return void
+     */
+    public function testGetQuickAddAttributeIdsForConfigurable(): void
+    {
+        $product = $this->createMock(Product::class);
+        $type = $this->createMock(Configurable::class);
+        $type->method('hasRequiredOptions')->willReturn(false);
+        $type->method('getConfigurableAttributes')->with($product)->willReturn([
+            $this->createAttribute('93'),
+            $this->createAttribute('144'),
+        ]);
+        $product->method('getTypeInstance')->willReturn($type);
+
+        $viewModel = new AddButton($this->createMock(UrlInterface::class));
+
+        $this->assertSame([93, 144], $viewModel->getQuickAddAttributeIds($product));
+    }
+
+    /**
+     * Configurable products with required custom options always go to the product page.
+     *
+     * @return void
+     */
+    public function testGetQuickAddAttributeIdsForConfigurableWithRequiredOptions(): void
+    {
+        $type = $this->createMock(Configurable::class);
+        $type->method('hasRequiredOptions')->willReturn(true);
+        $type->expects($this->never())->method('getConfigurableAttributes');
+        $product = $this->createMock(Product::class);
+        $product->method('getTypeInstance')->willReturn($type);
+
+        $viewModel = new AddButton($this->createMock(UrlInterface::class));
+
+        $this->assertSame([], $viewModel->getQuickAddAttributeIds($product));
+    }
+
+    /**
+     * Non-configurable products have no quick add attributes.
+     *
+     * @return void
+     */
+    public function testGetQuickAddAttributeIdsForOtherTypes(): void
+    {
+        $product = $this->createMock(Product::class);
+        $product->method('getTypeInstance')->willReturn($this->createMock(AbstractType::class));
+
+        $viewModel = new AddButton($this->createMock(UrlInterface::class));
+
+        $this->assertSame([], $viewModel->getQuickAddAttributeIds($product));
+    }
+
+    /**
+     * Build a configurable attribute stub.
+     *
+     * @param string $attributeId
+     * @return Attribute
+     */
+    private function createAttribute(string $attributeId): Attribute
+    {
+        $attribute = $this->createMock(Attribute::class);
+        $attribute->method('getAttributeId')->willReturn($attributeId);
+
+        return $attribute;
     }
 }

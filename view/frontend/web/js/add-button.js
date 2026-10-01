@@ -17,6 +17,9 @@ define([
             productId: 0,
             formSelector: '#product_addtocart_form',
             productUrl: '',
+            attributeIds: [],
+            tileSelector: '.product-item-info',
+            swatchAttributeSelector: '.swatch-attribute',
             buttonSelector: '[data-role="aw-fei-sp-add"]',
             messageSelector: '[data-role="aw-fei-sp-message"]',
             sectionName: 'aw-fei-sp'
@@ -70,22 +73,26 @@ define([
         },
 
         /**
-         * Validate product options and send them to the basket; products with required options
-         * in listings are sent to the product page to choose them.
+         * Validate product options and send them to the basket; in listings, products whose options
+         * are not fully chosen on the tile are sent to the product page to choose them.
          *
          * @private
          */
         _onClick: function () {
             var form = this.options.formSelector ? $(this.options.formSelector) : $(),
+                superAttributes,
                 payload;
 
             if (this.options.productUrl) {
-                window.location.href = this.options.productUrl;
+                superAttributes = this._getTileSuperAttributes();
 
-                return;
-            }
+                if (!superAttributes) {
+                    window.location.href = this.options.productUrl;
 
-            if (form.length) {
+                    return;
+                }
+                payload = [{name: 'product', value: this.options.productId}].concat(superAttributes);
+            } else if (form.length) {
                 if (form.data('mageValidation') && !form.validation('isValid')) {
                     return;
                 }
@@ -108,6 +115,37 @@ define([
                 .always(function () {
                     this._setBusy(false);
                 }.bind(this));
+        },
+
+        /**
+         * Collect swatch selections of the listing tile; null unless every configurable attribute is chosen.
+         *
+         * @returns {Array|null}
+         * @private
+         */
+        _getTileSuperAttributes: function () {
+            var tile = this.element.closest(this.options.tileSelector),
+                result = [],
+                isComplete;
+
+            if (!this.options.attributeIds.length) {
+                return null;
+            }
+
+            isComplete = this.options.attributeIds.every(function (attributeId) {
+                var value = tile.find(
+                    this.options.swatchAttributeSelector + '[data-attribute-id="' + attributeId + '"]'
+                ).attr('data-option-selected');
+
+                if (!value) {
+                    return false;
+                }
+                result.push({name: 'super_attribute[' + attributeId + ']', value: value});
+
+                return true;
+            }, this);
+
+            return isComplete ? result : null;
         },
 
         /**

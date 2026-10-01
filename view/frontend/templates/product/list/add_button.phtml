@@ -23,6 +23,7 @@ $product = $block->getData('product');
                  'productId' => (int) $product->getId(),
                  'formSelector' => '',
                  'productUrl' => $viewModel->getOptionsPageUrl($product),
+                 'attributeIds' => $viewModel->getQuickAddAttributeIds($product),
              ],
          ])) ?>'>
         <button type="button" class="action secondary aw-fei-sp-add__button" data-role="aw-fei-sp-add">
